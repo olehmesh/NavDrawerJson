@@ -1,4 +1,4 @@
 include ':repository'
 include ':domain'
 include ':presentation'
-rootProject.name = "NavDrawerJsonTask"
+rootProject.name = "NavDrawerJson"

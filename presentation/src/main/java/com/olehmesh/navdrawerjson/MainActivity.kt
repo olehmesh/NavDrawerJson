@@ -1,0 +1,126 @@
+package com.olehmesh.navdrawerjson
+
+import android.os.Bundle
+import android.util.Log
+import android.view.Menu
+import android.view.MenuItem
+import androidx.appcompat.app.ActionBarDrawerToggle
+import androidx.appcompat.app.AppCompatActivity
+import androidx.core.view.GravityCompat
+import androidx.fragment.app.Fragment
+import androidx.fragment.app.FragmentTransaction
+import com.google.android.material.navigation.NavigationView
+import com.olehmesh.navdrawerjson.di.App
+import com.olehmesh.navdrawerjson.fragments.image_fragment.ImageFragment
+import com.olehmesh.navdrawerjson.fragments.text_fragment.TextFragment
+import com.olehmesh.navdrawerjson.fragments.web_fragment.WebFragment
+import com.olehmesh.repository.models.MenuModel
+import com.olehmesh.repository.network.ApiService
+import kotlinx.android.synthetic.main.activity_main.*
+import kotlinx.android.synthetic.main.app_bar_main.*
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.launch
+import javax.inject.Inject
+
+class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
+
+    @Inject
+    lateinit var api: ApiService
+
+    private val scope = CoroutineScope(Job())
+    private var list: List<MenuModel>? = null
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+        super.onCreate(savedInstanceState)
+        setContentView(R.layout.activity_main)
+        App.component.inject(this)
+
+        setupUI()
+        getData()
+    }
+
+    private fun setupUI() {
+        setSupportActionBar(toolbar)
+        supportActionBar?.setDisplayShowTitleEnabled(false)
+        val drawerToggle = ActionBarDrawerToggle(
+            this,
+            drawer_layout,
+            toolbar,
+            R.string.navigation_drawer_open,
+            R.string.navigation_drawer_close
+        )
+        drawer_layout.addDrawerListener(drawerToggle)
+        drawerToggle.syncState()
+        nav_view.setNavigationItemSelectedListener(this)
+    }
+
+    private fun getData() {
+        scope.launch(Dispatchers.Main) {
+            try {
+                val response = api.getMenuItems()
+                when {
+                    response.isSuccessful -> {
+                        list = response.body()?.listMenu
+                        initMenu()
+                    }
+                }
+
+            } catch (exception: Exception) {
+                Log.e("Error: ", "No data")
+            }
+        }
+    }
+
+    private fun initMenu() {
+        val menu: Menu = nav_view.menu
+        for (item: MenuModel in list!!)
+
+            menu.apply {
+                add(item.name)
+                setGroupCheckable(0, true, true)
+                getItem(0).isChecked = true
+                isChangingConfigurations
+            }
+
+        onNavigationItemSelected(menu.getItem(0))
+    }
+
+    private fun getMenuItem(title: String): MenuModel? {
+        for (item: MenuModel in list!!) {
+            if (item.name.equals(title)) {
+                return item
+            }
+        }
+        return null
+    }
+
+    private fun loadFragment(fragment: Fragment) {
+        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
+        transaction.replace(R.id.nav_host_fragment, fragment)
+        transaction.disallowAddToBackStack()
+        transaction.commit()
+    }
+
+    override fun onNavigationItemSelected(item: MenuItem): Boolean {
+
+        val itemClick: MenuModel = getMenuItem(item.title.toString()) ?: return false
+
+        when (itemClick.function) {
+            ("image") -> {
+                ImageFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
+            }
+            ("text") -> {
+                TextFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
+            }
+            ("url") -> {
+                WebFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
+            }
+        }
+
+        drawer_layout.closeDrawer(GravityCompat.START)
+        return true
+    }
+
+}
