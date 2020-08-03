@@ -10,6 +10,9 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
 import androidx.lifecycle.Observer
 import com.google.android.material.navigation.NavigationView
+import com.olehmesh.navdrawerjson.utils.Constants.Companion.IMAGE
+import com.olehmesh.navdrawerjson.utils.Constants.Companion.TEXT
+import com.olehmesh.navdrawerjson.utils.Constants.Companion.URL
 import com.olehmesh.navdrawerjson.extensions.loadFragment
 import com.olehmesh.navdrawerjson.fragments.image_fragment.ImageFragment
 import com.olehmesh.navdrawerjson.fragments.text_fragment.TextFragment
@@ -75,19 +78,14 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
         val itemClick: MenuModel = getMenuItem(item.title.toString()) ?: return false
 
         when (itemClick.function) {
-            ("image") -> {
-                ImageFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
-            }
-            ("text") -> {
-                TextFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
-            }
-            ("url") -> {
-                WebFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
-            }
+            IMAGE -> ImageFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
+            TEXT -> TextFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
+            URL -> WebFragment.newInstance(itemClick.param)?.let { loadFragment(it) }
         }
 
         drawer_layout.closeDrawer(GravityCompat.START)
         return true
     }
+
 
 }

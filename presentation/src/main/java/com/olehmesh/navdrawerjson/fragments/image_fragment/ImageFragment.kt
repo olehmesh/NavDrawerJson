@@ -6,6 +6,7 @@ import androidx.annotation.NonNull
 import com.bumptech.glide.Glide
 import com.olehmesh.navdrawerjson.R
 import com.olehmesh.navdrawerjson.base.BaseFragment
+import com.olehmesh.navdrawerjson.utils.Constants.Companion.IMAGE
 import kotlinx.android.synthetic.main.fragment_image.*
 
 class ImageFragment : BaseFragment() {
@@ -18,7 +19,7 @@ class ImageFragment : BaseFragment() {
         if (arguments == null) return
 
         Glide.with(this)
-            .load(requireArguments().getString(R.string.image.toString()))
+            .load(requireArguments().getString(IMAGE))
             .placeholder(R.drawable.ic_placeholder)
             .error(R.drawable.ic_placeholder)
             .into(imageCircle)
@@ -28,7 +29,7 @@ class ImageFragment : BaseFragment() {
         fun newInstance(url: String?): ImageFragment? {
             val imageFragment = ImageFragment()
             val arguments = Bundle()
-            arguments.putString(R.string.image.toString(), url)
+            arguments.putString(IMAGE, url)
             imageFragment.arguments = arguments
             return imageFragment
         }

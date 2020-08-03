@@ -10,6 +10,7 @@ import android.webkit.WebViewClient
 import androidx.annotation.NonNull
 import com.olehmesh.navdrawerjson.R
 import com.olehmesh.navdrawerjson.base.BaseFragment
+import com.olehmesh.navdrawerjson.utils.Constants.Companion.URL
 import kotlinx.android.synthetic.main.fragment_web.*
 
 class WebFragment : BaseFragment() {
@@ -34,7 +35,7 @@ class WebFragment : BaseFragment() {
 
         }
 
-        webView.loadUrl(requireArguments().getString(R.string.url.toString()))
+        webView.loadUrl(requireArguments().getString(URL))
         webView.settings.javaScriptEnabled
     }
 
@@ -42,7 +43,7 @@ class WebFragment : BaseFragment() {
         fun newInstance(url: String?): WebFragment? {
             val webFragment = WebFragment()
             val arguments = Bundle()
-            arguments.putString(R.string.url.toString(), url)
+            arguments.putString(URL, url)
             webFragment.arguments = arguments
             return webFragment
         }

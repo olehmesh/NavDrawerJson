@@ -8,18 +8,15 @@
     <fragment
         android:id="@+id/text"
         android:name="com.olehmesh.navdrawerjson.fragments.text_fragment.TextFragment"
-        android:label="@string/text"
         tools:layout="@layout/fragment_text" />
 
     <fragment
         android:id="@+id/image"
         android:name="com.olehmesh.navdrawerjson.fragments.image_fragment.ImageFragment"
-        android:label="@string/image"
         tools:layout="@layout/fragment_image" />
 
     <fragment
         android:id="@+id/web"
         android:name="com.olehmesh.navdrawerjson.fragments.web_fragment.WebFragment"
-        android:label="@string/url"
         tools:layout="@layout/fragment_web" />
 </navigation>
