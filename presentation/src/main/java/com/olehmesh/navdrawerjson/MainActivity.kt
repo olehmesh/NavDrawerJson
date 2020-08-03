@@ -7,8 +7,6 @@ import android.view.MenuItem
 import androidx.appcompat.app.ActionBarDrawerToggle
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.GravityCompat
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import com.olehmesh.navdrawerjson.di.App
 import com.olehmesh.navdrawerjson.extensions.loadFragment
@@ -76,7 +74,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
 
     private fun initMenu() {
         val menu: Menu = nav_view.menu
-        for (item: MenuModel in list!!)
+        for (item in list!!)
             menu.apply {
                 add(item.name)
                 setGroupCheckable(0, true, true)
@@ -87,7 +85,7 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun getMenuItem(title: String): MenuModel? {
-        for (item: MenuModel in list!!) {
+        for (item in list!!) {
             if (item.name.equals(title)) {
                 return item
             }
