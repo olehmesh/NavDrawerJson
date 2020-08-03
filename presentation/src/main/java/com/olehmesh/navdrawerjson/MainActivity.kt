@@ -11,6 +11,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.FragmentTransaction
 import com.google.android.material.navigation.NavigationView
 import com.olehmesh.navdrawerjson.di.App
+import com.olehmesh.navdrawerjson.extensions.loadFragment
 import com.olehmesh.navdrawerjson.fragments.image_fragment.ImageFragment
 import com.olehmesh.navdrawerjson.fragments.text_fragment.TextFragment
 import com.olehmesh.navdrawerjson.fragments.web_fragment.WebFragment
@@ -18,10 +19,7 @@ import com.olehmesh.repository.models.MenuModel
 import com.olehmesh.repository.network.ApiService
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.app_bar_main.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.Job
-import kotlinx.coroutines.launch
+import kotlinx.coroutines.*
 import javax.inject.Inject
 
 class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelectedListener {
@@ -57,13 +55,16 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     }
 
     private fun getData() {
-        scope.launch(Dispatchers.Main) {
+        scope.launch(Dispatchers.IO) {
             try {
                 val response = api.getMenuItems()
                 when {
                     response.isSuccessful -> {
                         list = response.body()?.listMenu
-                        initMenu()
+                        withContext(Dispatchers.Main) {
+                            initMenu()
+                        }
+
                     }
                 }
 
@@ -76,15 +77,13 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
     private fun initMenu() {
         val menu: Menu = nav_view.menu
         for (item: MenuModel in list!!)
-
             menu.apply {
                 add(item.name)
                 setGroupCheckable(0, true, true)
-                getItem(0).isChecked = true
+                onNavigationItemSelected(getItem(0).setChecked(true))
                 isChangingConfigurations
             }
 
-        onNavigationItemSelected(menu.getItem(0))
     }
 
     private fun getMenuItem(title: String): MenuModel? {
@@ -94,13 +93,6 @@ class MainActivity : AppCompatActivity(), NavigationView.OnNavigationItemSelecte
             }
         }
         return null
-    }
-
-    private fun loadFragment(fragment: Fragment) {
-        val transaction: FragmentTransaction = supportFragmentManager.beginTransaction()
-        transaction.replace(R.id.nav_host_fragment, fragment)
-        transaction.disallowAddToBackStack()
-        transaction.commit()
     }
 
     override fun onNavigationItemSelected(item: MenuItem): Boolean {
