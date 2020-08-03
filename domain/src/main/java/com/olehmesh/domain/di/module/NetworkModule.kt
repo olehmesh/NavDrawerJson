@@ -1,8 +1,8 @@
-package com.olehmesh.navdrawerjson.di.module
+package com.olehmesh.domain.di.module
 
 import com.jakewharton.retrofit2.adapter.kotlin.coroutines.CoroutineCallAdapterFactory
-import com.olehmesh.navdrawerjson.di.scope.ApiScope
-import com.olehmesh.repository.BuildConfig
+import com.olehmesh.domain.BuildConfig
+import com.olehmesh.domain.di.scope.ApiScope
 import com.olehmesh.repository.network.ApiService
 import dagger.Module
 import dagger.Provides

@@ -1,9 +1,9 @@
-package com.olehmesh.navdrawerjson.di
+package com.olehmesh.domain.di
 
 import android.app.Application
-import com.olehmesh.navdrawerjson.di.component.AppComponent
-import com.olehmesh.navdrawerjson.di.component.DaggerAppComponent
-import com.olehmesh.navdrawerjson.di.module.NetworkModule
+import com.olehmesh.domain.di.component.AppComponent
+import com.olehmesh.domain.di.component.DaggerAppComponent
+import com.olehmesh.domain.di.module.NetworkModule
 
 class App : Application() {
 

@@ -1,4 +1,4 @@
-package com.olehmesh.navdrawerjson.di.scope
+package com.olehmesh.domain.di.scope
 
 import javax.inject.Scope
 
